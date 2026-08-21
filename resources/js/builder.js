@@ -20,6 +20,7 @@
         : { variables: {}, nodes: [] };
 
     const MODELS = window.VS_MODELS || [];
+    const NODE_TYPES = window.VS_NODE_TYPES || {};
     const OPERATORS = ['=', '!=', '>', '>=', '<', '<=', 'like', 'in', 'not in', 'null', 'not null'];
 
     // ---------- کمک‌کننده‌های مسیر ----------
@@ -41,40 +42,82 @@
 
     // ---------- ساخت نود پیش‌فرض ----------
     function defaultNode(type) {
+
+        if (NODE_TYPES[type]?.defaultNode) {
+            return NODE_TYPES[type].defaultNode(MODELS);
+        }
+
         switch (type) {
+
             case 'query':
-                return { type: 'query', model: MODELS[0] || '', conditions: [], order_by: { field: '', direction: 'asc' }, limit: 50, first: false, output: 'result' };
-            case 'condition':
-                return { type: 'condition', expression: '', then: [], else: [] };
-            case 'foreach':
-                return { type: 'foreach', source: '', as: 'item', body: [], output: '' };
-            case 'set_variable':
-                return { type: 'set_variable', name: 'my_var', expression: '' };
-            case 'save':
                 return {
-                    type: 'save',
+                    type: 'query',
                     model: MODELS[0] || '',
-                    operation: 'create',
-                    record_id: '',
-                    fields: [
-                        { field: '', value: '' }
-                    ],
-                    output: 'saved'
+                    conditions: [],
+                    order_by: {
+                        field: '',
+                        direction: 'asc'
+                    },
+                    limit: 50,
+                    first: false,
+                    output: 'result'
                 };
+
+            case 'condition':
+                return {
+                    type: 'condition',
+                    expression: '',
+                    then: [],
+                    else: []
+                };
+
+            case 'foreach':
+                return {
+                    type: 'foreach',
+                    source: '',
+                    as: 'item',
+                    body: [],
+                    output: ''
+                };
+
+            case 'set_variable':
+                return {
+                    type: 'set_variable',
+                    name: 'my_var',
+                    expression: ''
+                };
+
             case 'return':
-                return { type: 'return', expression: '' };
+                return {
+                    type: 'return',
+                    expression: ''
+                };
+
             default:
-                return { type };
+                return {
+                    type
+                };
         }
     }
 
     const TYPE_LABELS = {
+
         query: '🗄️ فراخوانی از دیتابیس',
-        save: '💾 ذخیره در دیتابیس',
+
         condition: '❓ شرط',
+
         foreach: '🔁 حلقه (foreach)',
+
         set_variable: '📦 تنظیم متغیر',
+
         return: '↩️ خروجی',
+
+        ...Object.fromEntries(
+            Object.entries(NODE_TYPES).map(([type, node]) => [
+                type,
+                node.label
+            ])
+        )
     };
 
     // ---------- عملیات ساختاری (نیازمند رندر مجدد) ----------
@@ -181,6 +224,19 @@
     }
 
     function renderNodeBody(pathStr, index, node) {
+        if (NODE_TYPES[node.type]?.render) {
+            return NODE_TYPES[node.type].render(
+                pathStr,
+                index,
+                node,
+                {
+                    models: MODELS,
+                    optionsHtml,
+                    escapeHtml,
+                    escapeAttr
+                }
+            );
+        }
         switch (node.type) {
             case 'query':
                 return `
@@ -384,15 +440,54 @@
     }
 
     function palette(pathStr) {
+
+        const extraButtons = Object.values(NODE_TYPES)
+            .filter(node => typeof node.button === 'function')
+            .map(node => node.button(pathStr))
+            .join('');
+
         return `
-        <div class="vs-palette vs-add-row">
-            <button type="button" onclick="vsAddNode('${pathStr}', 'query')">+ فراخوانی از دیتابیس</button>
-            <button type="button" onclick="vsAddNode('${pathStr}', 'save')" > + ذخیره در دیتابیس </button>
-            <button type="button" onclick="vsAddNode('${pathStr}', 'condition')">+ شرط</button>
-            <button type="button" onclick="vsAddNode('${pathStr}', 'foreach')">+ حلقه</button>
-            <button type="button" onclick="vsAddNode('${pathStr}', 'set_variable')">+ تنظیم متغیر</button>
-            <button type="button" onclick="vsAddNode('${pathStr}', 'return')">+ خروجی</button>
-        </div>`;
+            <div class="vs-palette vs-add-row">
+
+                <button
+                    type="button"
+                    onclick="vsAddNode('${pathStr}', 'query')"
+                >
+                    + فراخوانی از دیتابیس
+                </button>
+
+                <button
+                    type="button"
+                    onclick="vsAddNode('${pathStr}', 'condition')"
+                >
+                    + شرط
+                </button>
+
+                <button
+                    type="button"
+                    onclick="vsAddNode('${pathStr}', 'foreach')"
+                >
+                    + حلقه
+                </button>
+
+                <button
+                    type="button"
+                    onclick="vsAddNode('${pathStr}', 'set_variable')"
+                >
+                    + تنظیم متغیر
+                </button>
+
+                <button
+                    type="button"
+                    onclick="vsAddNode('${pathStr}', 'return')"
+                >
+                    + خروجی
+                </button>
+
+                ${extraButtons}
+
+            </div>
+        `;
     }
 
     // رندر بازگشتی: هر لیست از نودها را در ظرف مربوطه رسم می‌کند و برای فرزندانش هم فراخوانی می‌شود
@@ -455,6 +550,12 @@
         } catch (e) {
             output.textContent = 'خطا در ارتباط با سرور: ' + e.message;
         }
+    };
+
+    window.VS_BUILDER = {
+        getByPath,
+        render,
+        state
     };
 
     render();
