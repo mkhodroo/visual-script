@@ -1661,70 +1661,132 @@
     window.vsSave = function () {
 
         const name =
-            document.getElementById(
-                'vs-name'
-            );
+            document.getElementById('vs-name');
 
         const description =
-            document.getElementById(
-                'vs-description'
-            );
+            document.getElementById('vs-description');
 
         const isActive =
-            document.getElementById(
-                'vs-is-active'
-            );
-
+            document.getElementById('vs-is-active');
 
         const formName =
-            document.getElementById(
-                'vs-form-name'
-            );
+            document.getElementById('vs-form-name');
 
         const formDescription =
-            document.getElementById(
-                'vs-form-description'
-            );
+            document.getElementById('vs-form-description');
 
         const formIsActive =
-            document.getElementById(
-                'vs-form-is-active'
-            );
+            document.getElementById('vs-form-is-active');
 
         const formDefinition =
-            document.getElementById(
-                'vs-form-definition'
-            );
+            document.getElementById('vs-form-definition');
 
         const form =
-            document.getElementById(
-                'vs-form'
-            );
+            document.getElementById('vs-form');
 
 
         if (formName) {
-            formName.value =
-                name?.value || '';
+            formName.value = name?.value || '';
         }
-
 
         if (formDescription) {
             formDescription.value =
                 description?.value || '';
         }
 
-
         if (formIsActive) {
             formIsActive.value =
-                isActive?.checked
-                    ? '1'
-                    : '0';
+                isActive?.checked ? '1' : '0';
         }
 
 
+        /*
+        * قبل از ارسال، ساختار fields مربوط به
+        * Save Node را به ساختار مورد انتظار Engine
+        * تبدیل می‌کنیم.
+        */
+        const definition = JSON.parse(
+            JSON.stringify(state)
+        );
+
+
+        function normalizeNodes(nodes) {
+
+            if (!Array.isArray(nodes)) {
+                return;
+            }
+
+            nodes.forEach(node => {
+
+                /*
+                * تبدیل:
+                *
+                * fields: [
+                *   {
+                *     field: "name",
+                *     value: "Ali"
+                *   }
+                * ]
+                *
+                * به:
+                *
+                * fields: {
+                *   name: "Ali"
+                * }
+                */
+                if (
+                    node.type === 'save' &&
+                    Array.isArray(node.fields)
+                ) {
+
+                    const fields = {};
+
+                    node.fields.forEach(item => {
+
+                        if (
+                            !item ||
+                            !item.field
+                        ) {
+                            return;
+                        }
+
+                        fields[item.field] =
+                            item.value ?? '';
+                    });
+
+                    node.fields = fields;
+                }
+
+
+                /*
+                * Condition
+                */
+                if (node.type === 'condition') {
+
+                    normalizeNodes(node.then);
+                    normalizeNodes(node.else);
+                }
+
+
+                /*
+                * Foreach
+                */
+                if (node.type === 'foreach') {
+
+                    normalizeNodes(node.body);
+                }
+
+            });
+        }
+
+
+        normalizeNodes(definition.nodes);
+
+
         if (formDefinition) {
+
             formDefinition.value =
-                JSON.stringify(state);
+                JSON.stringify(definition);
         }
 
 
