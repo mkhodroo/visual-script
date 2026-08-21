@@ -23,7 +23,7 @@
 
     const state =
         window.VS_INITIAL_DEFINITION &&
-        window.VS_INITIAL_DEFINITION.nodes
+            window.VS_INITIAL_DEFINITION.nodes
             ? window.VS_INITIAL_DEFINITION
             : {
                 variables: {},
@@ -293,9 +293,9 @@
             list[index],
             list[target]
         ] = [
-            list[target],
-            list[index]
-        ];
+                list[target],
+                list[index]
+            ];
 
         render();
     };
@@ -577,9 +577,9 @@
                         "
                     >
                         ${optionsHtml(
-                            OPERATORS,
-                            c.operator
-                        )}
+                OPERATORS,
+                c.operator
+            )}
                     </select>
 
                     <input
@@ -695,9 +695,9 @@
                             "
                         >
                             ${optionsHtml(
-                                MODELS,
-                                node.model
-                            )}
+                    MODELS,
+                    node.model
+                )}
                         </select>
 
 
@@ -723,10 +723,10 @@
 
 
                     ${renderConditions(
-                        pathStr,
-                        index,
-                        node.conditions
-                    )}
+                    pathStr,
+                    index,
+                    node.conditions
+                )}
 
 
                     <div class="vs-field-row">
@@ -739,8 +739,8 @@
                             type="text"
                             placeholder="نام فیلد"
                             value="${escapeAttr(
-                                node.order_by?.field
-                            )}"
+                    node.order_by?.field
+                )}"
                             style="width:110px;"
                             oninput="
                                 vsSetNestedField(
@@ -766,9 +766,9 @@
                             "
                         >
                             ${optionsHtml(
-                                ['asc', 'desc'],
-                                node.order_by?.direction
-                            )}
+                    ['asc', 'desc'],
+                    node.order_by?.direction
+                )}
                         </select>
 
 
@@ -839,9 +839,9 @@
                             "
                         >
                             ${optionsHtml(
-                                MODELS,
-                                node.model
-                            )}
+                    MODELS,
+                    node.model
+                )}
                         </select>
 
 
@@ -862,17 +862,16 @@
                             "
                         >
                             ${optionsHtml(
-                                ['create', 'update'],
-                                node.operation
-                            )}
+                    ['create', 'update'],
+                    node.operation
+                )}
                         </select>
 
                     </div>
 
 
-                    ${
-                        node.operation === 'update'
-                            ? `
+                    ${node.operation === 'update'
+                        ? `
 
                                 <div class="vs-field-row">
 
@@ -884,8 +883,8 @@
                                         type="text"
                                         placeholder="مثال: 10 یا $user_id"
                                         value="${escapeAttr(
-                                            node.record_id
-                                        )}"
+                            node.record_id
+                        )}"
                                         style="width:180px;"
                                         oninput="
                                             vsSetField(
@@ -900,7 +899,7 @@
                                 </div>
 
                             `
-                            : ''
+                        : ''
                     }
 
 
@@ -916,9 +915,8 @@
                         </label>
 
 
-                        ${
-                            (node.fields || [])
-                                .map((item, fi) => `
+                        ${(node.fields || [])
+                        .map((item, fi) => `
 
                                     <div class="vs-cond-row">
 
@@ -926,8 +924,8 @@
                                             type="text"
                                             placeholder="نام فیلد"
                                             value="${escapeAttr(
-                                                item.field
-                                            )}"
+                            item.field
+                        )}"
                                             style="width:140px;"
                                             oninput="
                                                 vsSetSaveField(
@@ -945,8 +943,8 @@
                                             type="text"
                                             placeholder="مقدار یا $متغیر"
                                             value="${escapeAttr(
-                                                item.value
-                                            )}"
+                            item.value
+                        )}"
                                             style="width:180px;"
                                             oninput="
                                                 vsSetSaveField(
@@ -977,8 +975,8 @@
                                     </div>
 
                                 `)
-                                .join('')
-                        }
+                        .join('')
+                    }
 
 
                         <button
@@ -1009,8 +1007,8 @@
                         <input
                             type="text"
                             value="${escapeAttr(
-                                node.output
-                            )}"
+                        node.output
+                    )}"
                             style="width:150px;"
                             oninput="
                                 vsSetField(
@@ -1045,8 +1043,8 @@
                             type="text"
                             placeholder="مثال: count(posts) > 0"
                             value="${escapeAttr(
-                                node.expression
-                            )}"
+                    node.expression
+                )}"
                             style="flex:1;"
                             oninput="
                                 vsSetField(
@@ -1081,19 +1079,19 @@
 
                                 <div
                                     id="vs-list-${joinPath(
-                                        pathStr,
-                                        index,
-                                        'then'
-                                    )}"
+                    pathStr,
+                    index,
+                    'then'
+                )}"
                                 ></div>
 
                                 ${palette(
-                                    joinPath(
-                                        pathStr,
-                                        index,
-                                        'then'
-                                    )
-                                )}
+                    joinPath(
+                        pathStr,
+                        index,
+                        'then'
+                    )
+                )}
 
                             </div>
 
@@ -1112,19 +1110,19 @@
 
                                 <div
                                     id="vs-list-${joinPath(
-                                        pathStr,
-                                        index,
-                                        'else'
-                                    )}"
+                    pathStr,
+                    index,
+                    'else'
+                )}"
                                 ></div>
 
                                 ${palette(
-                                    joinPath(
-                                        pathStr,
-                                        index,
-                                        'else'
-                                    )
-                                )}
+                    joinPath(
+                        pathStr,
+                        index,
+                        'else'
+                    )
+                )}
 
                             </div>
 
@@ -1152,8 +1150,8 @@
                         <input
                             type="text"
                             value="${escapeAttr(
-                                node.source
-                            )}"
+                    node.source
+                )}"
                             style="width:120px;"
                             oninput="
                                 vsSetField(
@@ -1173,8 +1171,8 @@
                         <input
                             type="text"
                             value="${escapeAttr(
-                                node.as
-                            )}"
+                    node.as
+                )}"
                             style="width:100px;"
                             oninput="
                                 vsSetField(
@@ -1194,8 +1192,8 @@
                         <input
                             type="text"
                             value="${escapeAttr(
-                                node.output
-                            )}"
+                    node.output
+                )}"
                             style="width:120px;"
                             oninput="
                                 vsSetField(
@@ -1221,19 +1219,19 @@
 
                         <div
                             id="vs-list-${joinPath(
-                                pathStr,
-                                index,
-                                'body'
-                            )}"
+                    pathStr,
+                    index,
+                    'body'
+                )}"
                         ></div>
 
                         ${palette(
-                            joinPath(
-                                pathStr,
-                                index,
-                                'body'
-                            )
-                        )}
+                    joinPath(
+                        pathStr,
+                        index,
+                        'body'
+                    )
+                )}
 
                     </div>
 
@@ -1257,8 +1255,8 @@
                         <input
                             type="text"
                             value="${escapeAttr(
-                                node.name
-                            )}"
+                    node.name
+                )}"
                             style="width:120px;"
                             oninput="
                                 vsSetField(
@@ -1279,8 +1277,8 @@
                             type="text"
                             placeholder="مثال: count(posts)"
                             value="${escapeAttr(
-                                node.expression
-                            )}"
+                    node.expression
+                )}"
                             style="flex:1;"
                             oninput="
                                 vsSetField(
@@ -1315,8 +1313,8 @@
                             type="text"
                             placeholder="مثال: posts"
                             value="${escapeAttr(
-                                node.expression
-                            )}"
+                    node.expression
+                )}"
                             style="flex:1;"
                             oninput="
                                 vsSetField(
@@ -1358,13 +1356,12 @@
 
                     <span
                         class="vs-node-badge badge-${escapeAttr(
-                            node.type
-                        )}"
+            node.type
+        )}"
                     >
-                        ${
-                            TYPE_LABELS[node.type]
-                            || node.type
-                        }
+                        ${TYPE_LABELS[node.type]
+            || node.type
+            }
                     </span>
 
 
@@ -1419,10 +1416,10 @@
 
 
                 ${renderNodeBody(
-                    pathStr,
-                    index,
-                    node
-                )}
+                pathStr,
+                index,
+                node
+            )}
 
             </div>
 
@@ -1658,6 +1655,76 @@
     // Save Definition
     // =========================================================
 
+    function normalizeDefinition(source) {
+
+        const definition = JSON.parse(
+            JSON.stringify(source)
+        );
+
+        function normalizeNodes(nodes) {
+
+            if (!Array.isArray(nodes)) {
+                return;
+            }
+
+            nodes.forEach(node => {
+
+                // ---------------------------------------------
+                // Save Node
+                // ---------------------------------------------
+
+                if (
+                    node.type === 'save' &&
+                    Array.isArray(node.fields)
+                ) {
+
+                    const fields = {};
+
+                    node.fields.forEach(item => {
+
+                        if (
+                            !item ||
+                            !item.field
+                        ) {
+                            return;
+                        }
+
+                        fields[item.field] =
+                            item.value ?? '';
+                    });
+
+                    node.fields = fields;
+                }
+
+
+                // ---------------------------------------------
+                // Condition
+                // ---------------------------------------------
+
+                if (node.type === 'condition') {
+
+                    normalizeNodes(node.then);
+                    normalizeNodes(node.else);
+                }
+
+
+                // ---------------------------------------------
+                // Foreach
+                // ---------------------------------------------
+
+                if (node.type === 'foreach') {
+
+                    normalizeNodes(node.body);
+                }
+
+            });
+        }
+
+        normalizeNodes(definition.nodes);
+
+        return definition;
+    }
+
     window.vsSave = function () {
 
         const name =
@@ -1686,7 +1753,8 @@
 
 
         if (formName) {
-            formName.value = name?.value || '';
+            formName.value =
+                name?.value || '';
         }
 
         if (formDescription) {
@@ -1700,87 +1768,15 @@
         }
 
 
-        /*
-        * قبل از ارسال، ساختار fields مربوط به
-        * Save Node را به ساختار مورد انتظار Engine
-        * تبدیل می‌کنیم.
-        */
-        const definition = JSON.parse(
-            JSON.stringify(state)
+        // تبدیل ساختار Builder به ساختار Engine
+        const definition =
+            normalizeDefinition(state);
+
+
+        console.log(
+            'VS SAVE DEFINITION:',
+            definition
         );
-
-
-        function normalizeNodes(nodes) {
-
-            if (!Array.isArray(nodes)) {
-                return;
-            }
-
-            nodes.forEach(node => {
-
-                /*
-                * تبدیل:
-                *
-                * fields: [
-                *   {
-                *     field: "name",
-                *     value: "Ali"
-                *   }
-                * ]
-                *
-                * به:
-                *
-                * fields: {
-                *   name: "Ali"
-                * }
-                */
-                if (
-                    node.type === 'save' &&
-                    Array.isArray(node.fields)
-                ) {
-
-                    const fields = {};
-
-                    node.fields.forEach(item => {
-
-                        if (
-                            !item ||
-                            !item.field
-                        ) {
-                            return;
-                        }
-
-                        fields[item.field] =
-                            item.value ?? '';
-                    });
-
-                    node.fields = fields;
-                }
-
-
-                /*
-                * Condition
-                */
-                if (node.type === 'condition') {
-
-                    normalizeNodes(node.then);
-                    normalizeNodes(node.else);
-                }
-
-
-                /*
-                * Foreach
-                */
-                if (node.type === 'foreach') {
-
-                    normalizeNodes(node.body);
-                }
-
-            });
-        }
-
-
-        normalizeNodes(definition.nodes);
 
 
         if (formDefinition) {
@@ -1807,9 +1803,7 @@
                 'vs-preview-output'
             );
 
-
         let input = {};
-
 
         try {
 
@@ -1834,6 +1828,17 @@
 
         try {
 
+            // تبدیل ساختار Builder به ساختار Engine
+            const definition =
+                normalizeDefinition(state);
+
+
+            console.log(
+                'VS PREVIEW DEFINITION:',
+                definition
+            );
+
+
             const res =
                 await fetch(
                     window.VS_PREVIEW_URL,
@@ -1852,7 +1857,7 @@
                         },
 
                         body: JSON.stringify({
-                            definition: state,
+                            definition,
                             input
                         }),
                     }
