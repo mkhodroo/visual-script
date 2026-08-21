@@ -97,6 +97,6 @@
     window.VS_PREVIEW_URL = "{{ route('visual-script.preview') }}";
     window.VS_CSRF = "{{ csrf_token() }}";
 </script>
-<script src="{{ url('public/vendor/visual-script/js/nodes/save-node.js') }}"></script>
-<script src="{{ url('public/vendor/visual-script/js/builder.js') }}"></script>
+<script src="{{ url('public/vendor/visual-script/js/nodes/save-node.js?v=1.0') }}"></script>
+<script src="{{ url('public/vendor/visual-script/js/builder.js?v=1.0') }}"></script>
 @endpush
