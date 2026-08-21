@@ -26,6 +26,10 @@ class ExpressionEvaluator
 
         $this->language->register('empty', fn ($str) => sprintf('empty(%s)', $str),
             fn ($arguments, $value) => empty($value));
+
+        $this->language->register('str_contains',
+        fn ($haystack, $needle) => sprintf('str_contains(%s, %s)', $haystack, $needle),
+        fn ($arguments, $haystack, $needle) => str_contains((string) $haystack, (string) $needle));
     }
 
     public function evaluate(string $expression, ExecutionContext $context): mixed
