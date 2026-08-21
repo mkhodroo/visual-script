@@ -90,7 +90,7 @@
 @endif
 @endsection
 
-@push('scripts')
+@section('scripts')
 <script>
     window.VS_MODELS = @json($models);
     window.VS_INITIAL_DEFINITION = @json($script->definition ?? ['variables' => [], 'nodes' => []]);
@@ -98,4 +98,4 @@
     window.VS_CSRF = "{{ csrf_token() }}";
 </script>
 <script src="{{ url('public/vendor/visual-script/js/builder.js') }}"></script>
-@endpush
+@endsection
