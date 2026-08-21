@@ -25,4 +25,9 @@ class ModelResolver
     {
         return config("visual-script.allowed_fields.{$name}");
     }
+
+    public static function allowedWriteFields(string $name): ?array
+    {
+        return config("visual-script.allowed_write_fields.{$name}");
+    }
 }

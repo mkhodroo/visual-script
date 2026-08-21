@@ -8,6 +8,7 @@ use VisualScript\Engine\Nodes\ConditionNode;
 use VisualScript\Engine\Nodes\ForeachNode;
 use VisualScript\Engine\Nodes\QueryNode;
 use VisualScript\Engine\Nodes\ReturnNode;
+use VisualScript\Engine\Nodes\SaveNode;
 use VisualScript\Engine\Nodes\SetVariableNode;
 
 /**
@@ -25,6 +26,7 @@ class NodeRegistry
 
         $this->handlers = [
             'query' => new QueryNode(),
+            'save' => new SaveNode(),
             'set_variable' => new SetVariableNode($evaluator),
             'return' => new ReturnNode($evaluator),
         ];

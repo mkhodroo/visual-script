@@ -50,6 +50,17 @@
                 return { type: 'foreach', source: '', as: 'item', body: [], output: '' };
             case 'set_variable':
                 return { type: 'set_variable', name: 'my_var', expression: '' };
+            case 'save':
+                return {
+                    type: 'save',
+                    model: MODELS[0] || '',
+                    operation: 'create',
+                    record_id: '',
+                    fields: [
+                        { field: '', value: '' }
+                    ],
+                    output: 'saved'
+                };
             case 'return':
                 return { type: 'return', expression: '' };
             default:
@@ -59,6 +70,7 @@
 
     const TYPE_LABELS = {
         query: '🗄️ فراخوانی از دیتابیس',
+        save: '💾 ذخیره در دیتابیس',
         condition: '❓ شرط',
         foreach: '🔁 حلقه (foreach)',
         set_variable: '📦 تنظیم متغیر',
@@ -107,6 +119,35 @@
 
     window.vsSetCheckbox = function (pathStr, index, key, checked) {
         getByPath(pathStr)[index][key] = checked;
+    };
+
+    window.vsAddSaveField = function (pathStr, index) {
+        const node = getByPath(pathStr)[index];
+
+        node.fields = node.fields || [];
+
+        node.fields.push({
+            field: '',
+            value: ''
+        });
+
+        render();
+    };
+
+    window.vsRemoveSaveField = function (pathStr, index, fieldIndex) {
+        const node = getByPath(pathStr)[index];
+
+        node.fields.splice(fieldIndex, 1);
+
+        render();
+    };
+
+    window.vsSetSaveField = function (pathStr, index, fieldIndex, key, value) {
+        const node = getByPath(pathStr)[index];
+
+        node.fields = node.fields || [];
+
+        node.fields[fieldIndex][key] = value;
     };
 
     // ---------- رندر ----------
@@ -166,6 +207,99 @@
                         <label><input type="checkbox" ${node.first ? 'checked' : ''}
                             onchange="vsSetCheckbox('${pathStr}', ${index}, 'first', this.checked)"> فقط اولین رکورد</label>
                     </div>`;
+
+            case 'save':
+                return `
+                    <div class="vs-field-row">
+
+                        <label>مدل</label>
+
+                        <select onchange="vsSetField('${pathStr}', ${index}, 'model', this.value)">
+                            ${optionsHtml(MODELS, node.model)}
+                        </select>
+
+                        <label>عملیات</label>
+
+                        <select onchange="vsSetField('${pathStr}', ${index}, 'operation', this.value)">
+                            ${optionsHtml(['create', 'update'], node.operation)}
+                        </select>
+
+                    </div>
+
+                    ${node.operation === 'update' ? `
+                        <div class="vs-field-row">
+
+                            <label>شناسه رکورد</label>
+
+                            <input
+                                type="text"
+                                placeholder="مثال: 10 یا $user_id"
+                                value="${escapeAttr(node.record_id)}"
+                                style="width:180px;"
+                                oninput="vsSetField('${pathStr}', ${index}, 'record_id', this.value)"
+                            >
+
+                        </div>
+                    ` : ''}
+
+                    <div style="margin-top:10px;">
+
+                        <label style="font-size:12px;color:#374151;">
+                            فیلدهای قابل ذخیره
+                        </label>
+
+                        ${(node.fields || []).map((item, fi) => `
+                            <div class="vs-cond-row">
+
+                                <input
+                                    type="text"
+                                    placeholder="نام فیلد"
+                                    value="${escapeAttr(item.field)}"
+                                    style="width:140px;"
+                                    oninput="vsSetField('${pathStr}', ${index}, 'fields', ${JSON.stringify(node.fields).replace(/"/g, '&quot;')})"
+                                >
+
+                                <input
+                                    type="text"
+                                    placeholder="مقدار یا $متغیر"
+                                    value="${escapeAttr(item.value)}"
+                                    style="width:180px;"
+                                >
+
+                                <button
+                                    type="button"
+                                    class="vs-btn small danger"
+                                    onclick="vsRemoveSaveField('${pathStr}', ${index}, ${fi})"
+                                >
+                                    حذف
+                                </button>
+
+                            </div>
+                        `).join('')}
+
+                        <button
+                            type="button"
+                            class="vs-btn small secondary"
+                            onclick="vsAddSaveField('${pathStr}', ${index})"
+                        >
+                            + افزودن فیلد
+                        </button>
+
+                    </div>
+
+                    <div class="vs-field-row" style="margin-top:8px;">
+
+                        <label>خروجی در متغیر</label>
+
+                        <input
+                            type="text"
+                            value="${escapeAttr(node.output)}"
+                            style="width:150px;"
+                            oninput="vsSetField('${pathStr}', ${index}, 'output', this.value)"
+                        >
+
+                    </div>
+                `;
 
             case 'condition':
                 return `
@@ -253,6 +387,7 @@
         return `
         <div class="vs-palette vs-add-row">
             <button type="button" onclick="vsAddNode('${pathStr}', 'query')">+ فراخوانی از دیتابیس</button>
+            <button type="button" onclick="vsAddNode('${pathStr}', 'save')" > + ذخیره در دیتابیس </button>
             <button type="button" onclick="vsAddNode('${pathStr}', 'condition')">+ شرط</button>
             <button type="button" onclick="vsAddNode('${pathStr}', 'foreach')">+ حلقه</button>
             <button type="button" onclick="vsAddNode('${pathStr}', 'set_variable')">+ تنظیم متغیر</button>

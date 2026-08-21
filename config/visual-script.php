@@ -21,6 +21,14 @@ return [
         // 'Post' => ['id', 'title', 'status', 'created_at'],
     ],
 
+    'allowed_write_fields' => [
+        'User' => [
+            'name',
+            'email',
+            'password',
+        ],
+    ],
+
     // عملگرهای مجاز در شرط‌های نود کوئری
     'allowed_operators' => ['=', '!=', '>', '>=', '<', '<=', 'like', 'in', 'not in', 'null', 'not null'],
 
