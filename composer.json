@@ -1,5 +1,5 @@
 {
-    "name": "yourvendor/laravel-visual-script",
+    "name": "arghavan/visual-script",
     "description": "پکیج اسکریپت‌نویسی ویژوال (Node-based) برای لاراول - ساخت منطق برنامه با المان‌های بصری (کوئری، شرط، حلقه، متغیر) بدون نوشتن PHP خام",
     "type": "library",
     "license": "MIT",
