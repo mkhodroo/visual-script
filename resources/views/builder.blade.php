@@ -1,4 +1,4 @@
-@extends('visual-script::layout')
+@extends('behin-layouts.app')
 
 @section('title', $script->exists ? 'ویرایش اسکریپت: '.$script->name : 'اسکریپت جدید')
 
