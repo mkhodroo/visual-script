@@ -1,4 +1,4 @@
-@extends('visual-script::layout')
+@extends('behin-layouts.app')
 
 @section('title', 'لیست اسکریپت‌ها')
 
