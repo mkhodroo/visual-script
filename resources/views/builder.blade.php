@@ -60,7 +60,7 @@
         </div>
         <div class="vs-card">
             <h3 style="margin-top:0;">خروجی اجرای آزمایشی</h3>
-            <div id="vs-preview-output">هنوز اجرا نشده است.</div>
+            <div id="vs-preview-output" dir="ltr">هنوز اجرا نشده است.</div>
         </div>
         @if ($script->exists)
         <div class="vs-card">
