@@ -12,7 +12,7 @@ return [
     // کلید = نامی که کاربر در ویرایشگر ویژوال می‌بیند، مقدار = کلاس مدل واقعی.
     'models' => [
         // 'Post' => \App\Models\Post::class,
-        // 'User' => \App\Models\User::class,
+        'User' => \App\Models\User::class,
     ],
 
     // فیلدهای مجاز برای شرط‌گذاری روی هر مدل. اگر برای یک مدل خالی بماند،
