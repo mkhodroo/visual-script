@@ -2,7 +2,7 @@
 
 @section('title', $script->exists ? 'ویرایش اسکریپت: '.$script->name : 'اسکریپت جدید')
 
-@push('styles')
+@section('styles')
 <style>
     .vs-node { border:1px solid #d1d5db; border-radius:8px; padding:10px; margin-bottom:8px; background:#f9fafb; }
     .vs-node-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
@@ -20,7 +20,14 @@
     .vs-cond-row { display:flex; gap:6px; margin-bottom:4px; align-items:center; }
     #vs-preview-output { white-space:pre-wrap; background:#111827; color:#a7f3d0; padding:12px; border-radius:8px; font-size:12px; max-height:300px; overflow:auto; }
 </style>
-@endpush
+<script>
+    window.VS_MODELS = @json($models);
+    window.VS_INITIAL_DEFINITION = @json($script->definition ?? ['variables' => [], 'nodes' => []]);
+    window.VS_PREVIEW_URL = "{{ route('visual-script.preview') }}";
+    window.VS_CSRF = "{{ csrf_token() }}";
+</script>
+<script src="{{ url('public/vendor/visual-script/js/builder.js') }}"></script>
+@endsection
 
 @section('content')
 <div style="display:grid; grid-template-columns: 1fr 380px; gap:16px; align-items:start;">
@@ -90,12 +97,3 @@
 @endif
 @endsection
 
-@section('scripts')
-<script>
-    window.VS_MODELS = @json($models);
-    window.VS_INITIAL_DEFINITION = @json($script->definition ?? ['variables' => [], 'nodes' => []]);
-    window.VS_PREVIEW_URL = "{{ route('visual-script.preview') }}";
-    window.VS_CSRF = "{{ csrf_token() }}";
-</script>
-<script src="{{ url('public/vendor/visual-script/js/builder.js') }}"></script>
-@endsection
